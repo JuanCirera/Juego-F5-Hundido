@@ -4,6 +4,7 @@ public class Jugador {
     //Atributos
     private static String nombre;
     private static int totalJugadores=0;
+    private static int barcos;
 
     //Constructor principal
     public Jugador(String nombre){
