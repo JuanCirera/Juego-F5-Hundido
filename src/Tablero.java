@@ -36,14 +36,6 @@ public class Tablero {
         this.barcosRestantes=barcos;
     }
 
-    //Constructor para los tableros personalizados.
-//    public Tablero(String nombre, int filas, int col, int barcos){
-//        this.nombre=nombre;
-//        this.filas=filas;
-//        this.col=col;
-//        this.barcos=barcos;
-//        this.barcosRestantes=barcos;
-//    }
 
     /**
      * Funcion para gestionar el tablero visible y la matriz donde se guardan los barcos. Además se encarga
@@ -58,8 +50,6 @@ public class Tablero {
         //El array visible se inicializa parecido al original con la diferencia de que este almacena caracteres.
         char matrizVisible[][]=GestionArray.InicializarMatrizCaracter(this.filas,this.col,'*');
 //        int barcosRestantes=this.barcos;      //Guarda los barcos max definidos en la instancia, se va decrementando por cada descubrimiento.
-//        int intentos=0;
-//        int posicion=0;
         generarCoor(matriz, this.barcos, pos1);
         generarBarco(b1);
         esconderBarco(matriz, this.barcos, cod1);  //Se llama a la funcion esconderBarcos para posicionar el 1er barco.
@@ -134,11 +124,6 @@ public class Tablero {
                 }
             } while (barcosRestantes > 0);
 
-            //Una vez fuera del do-while y comprobando de nuevo que no quedan barcos, se informa de que se ha superado el nivel.
-            //Sin esta comprobación, cuando el catch captura una excepcion siempre se mostrara este mensaje.
-//            if (barcosRestantes==0){
-//                System.out.println(ANSI_GREEN+"¡Enhorabuena, has superado el nivel 1! Después de "+intentos+" intentos."+ANSI_RESET);
-//            }
         }catch (ArrayIndexOutOfBoundsException e){  //Se captura esta excepcion que salta al introducir un valor que esta fuera del rango del array. Ej: arr5x5 y valor=5, falla.
             System.out.println(ANSI_RED+"Error. El valor esta fuera de rango."+ANSI_RESET);
         }catch (Exception e) {    //Captura excepciones genericas, no previstas.
@@ -173,47 +158,8 @@ public class Tablero {
                 y=rows;
             }
         }while (matriz[rows][cols]==1 | matriz[y][x]==1);
-
-//        System.out.println("Barco:"+rows+","+cols+";"+y+","+x);
-
-
-//        String barco1=rows+","+cols+" "+y+","+x;
-
-//        return barco1;
     }
 
-//    public static String generarBarco2(int matriz[][], int maxBarcos, int posicion){
-//        int limite=matriz.length-1;
-//        String barco2;
-//        Random rnd=new Random();
-//
-//        do {
-//            rows = rnd.nextInt(0, limite); //Se genera un entero aleatorio desde 0 hasta la longitud total del array.
-//            cols = rnd.nextInt(0, limite);  //Hay dos aleatorios para las filas y a2 para las columnas.
-//            System.out.println("Barco 2:"+rows + "," + cols);
-//
-//            //Horizontal
-//            if (posicion == 0 && rows < matriz.length && cols < matriz.length) { //Si la posicion es horizontal y las coordenadas son menores que el limite, se suma una casilla.
-//                x = cols + 1;
-//            } else if (posicion == 0 && rows == limite | cols == limite) { //Si las coordenadas están justo en el límite, se resta una casilla.
-//                x = cols - 1;
-//            } else {
-//                x = cols;
-//            }
-//
-//            //Vertical
-//            if (posicion == 1 && rows < matriz.length && cols < matriz.length) {
-//                y = rows + 1;
-//            } else if (posicion == 1 && rows == limite | cols == limite) {
-//                y = rows - 1;
-//            } else {
-//                y = rows;
-//            }
-//            barco2=rows+","+cols+" "+y+","+x;
-//        }while (barco2.equals(barco1));
-//
-//        return barco2;
-//    }
 
     //Esta funcion guarda las coordenadas aleatorias generadas antes en el objeto barco pasado por parametro.
     public static void generarBarco(Barco barco){

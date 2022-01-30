@@ -3,6 +3,9 @@ import utilidades.GestionArray;
 import utilidades.PeticionDatos;
 
 public class JuegoHundido {
+    /**
+     * @autor Juan Fco Cirera
+     * */
 
     //Aquí uso variables para guardar el color ANSI (color de texto de la terminal) para poder diferenciar mejor el texto.
     public static final String ANSI_RESET = "\u001B[0m";
@@ -79,23 +82,6 @@ public class JuegoHundido {
                 barcos[b.getTotalBarcos()-1] = b;
             }
         }
-
-//        //Barco 2
-//        System.out.println("Posición 2º barco: 0-Horizontal, 1-Vertical");
-//        do {
-//            posicion2=2;
-//           int p = PeticionDatos.pedirEnteroPositivo(true, "> ");
-//            if (p==0 | p==1){
-//                posicion2=p;
-//            }else{
-//                System.out.println(ANSI_RED+"Error. La posición debe ser 0 o 1."+ANSI_RESET);
-//            }
-//        }while (posicion2!=0 && posicion2!=1);
-//        if (Barco.getTotalBarcos() < barcos.length){
-//            b2=new Barco(2,posicion1, codBarco);
-//            barcos[b2.getTotalBarcos()] = b2;
-//        }
-
     }
 
     public static int pedirFila(){
@@ -128,7 +114,6 @@ public class JuegoHundido {
                     for(int x=0;x<1;x++) {
                         nuevoJugador(); //Se piden los datos de ambos jugadores
                         nuevoBarco();   //Además de la posicion de los barcos
-
                     }
                     Tablero tablero1=new Tablero(4,4,2); //Se instancia un objeto tablero para cada jugador.
                     Tablero tablero2=new Tablero(4,4,2);
