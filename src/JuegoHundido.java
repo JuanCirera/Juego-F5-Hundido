@@ -10,9 +10,12 @@ public class JuegoHundido {
     //Aquí uso variables para guardar el color ANSI (color de texto de la terminal) para poder diferenciar mejor el texto.
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_BGREEN = "\u001B[32;1m";
     public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_BBLUE = "\u001B[34;1m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_CYAN = "\u001B[36m";
 
     //Atributos de clase, solo se van a usar en esta clase por eso son static
     private static int opcion;
@@ -21,6 +24,7 @@ public class JuegoHundido {
     private static int posicion;
     private static Barco b;
     private static int codBarco=0;
+    private static Tablero tablero1, tablero2; //MOVER
 
     //Arrays de clase para objetos
     private static Barco barcos[]=new Barco[4]; //Array para meter los objetos barco.
@@ -31,7 +35,7 @@ public class JuegoHundido {
      * Muestra el menu de seleccion de niveles. Es la 'pantalla' principal del juego.
      * */
     public static void mostrarMenu(){
-        System.out.println("\n"+ANSI_BLUE+"╠═══════════F5 HUNDIDO══════════╣"+ANSI_RESET); //Titulo del juego
+        System.out.println("\n"+ANSI_BLUE+"╔═══════════F5 HUNDIDO══════════╗"+ANSI_RESET); //Titulo del juego
 
         opcion=PeticionDatos.pedirEnteroPositivo(true,"""   
                 ║ 1-> Nivel 1    (2 barcos)     ║
@@ -40,12 +44,14 @@ public class JuegoHundido {
                 ║ 0-> Salir                     ║
                 ╚ Elige un nivel: """);   //Aqui llamo a la funcion pedirEnteroPositivo y le paso el menu que quiero que muestre.
 
+        System.out.println(); //Linea en blanco para separar el menu del resto de lineas.
     }
 
     /**
      * Esta funcion crea un objeto jugador y lo guarda en el array de objetos jugador.
      * */
     public static void nuevoJugador() {
+        System.out.println(); //Espacio
         String nombre = PeticionDatos.pedirCadena("Nombre jugador "+(Jugador.getTotalJugadores()+1)+": ");
 //        Tablero tablero=new Tablero(4,4,2);
         if (Jugador.getTotalJugadores() < jugadores.length) {
@@ -59,13 +65,13 @@ public class JuegoHundido {
      * */
     //Pregunta y guarda la longitud y posicion de cada barco
     public static void nuevoBarco(){
-        System.out.println(ANSI_BLUE+"**Posición de los barcos**"+ANSI_RESET);
+        System.out.println(ANSI_BBLUE+"** Posición de los barcos **"+ANSI_RESET);
 
         for(int i=0;i<2;i++) {
             do {
                 posicion = 2; //posicion tiene que tener un valor por defecto antes de realizar todo lo de abajo, si no
                 //cuando se pide el segundo jugador posicion aun tiene los valores del jugador anterior y fallan las condiciones.
-                int p = PeticionDatos.pedirEnteroPositivo(true, "0-Horizontal, 1-Vertical"+"\n"+"> ");
+                int p = PeticionDatos.pedirEnteroPositivo(true, "0-Horizontal, 1-Vertical"+"\n"+ANSI_GREEN+"> "+ANSI_RESET);
                 if (p == 0 | p == 1) {
                     posicion = p;
                 } else {
@@ -86,7 +92,7 @@ public class JuegoHundido {
      * @return coor1 - entero válido introducido por teclado.
      * */
     public static int pedirFila(){
-        System.out.println(ANSI_BLUE + "**Introduce las coordenadas**" + ANSI_RESET);
+        System.out.println(ANSI_BBLUE + "** Introduce las coordenadas **" + ANSI_RESET);
         //Llamo a las funciones de peticion para enteros y guardo el valor en coor1.
         int coor1 = PeticionDatos.pedirEnteroPositivo(true, ">fila: ");
         return coor1;
@@ -104,11 +110,8 @@ public class JuegoHundido {
 
     }
 
-    private static Tablero tablero1, tablero2; //MOVER
-
     public static void tablero1(){
         tablero1=new Tablero(4,4,2); //Se instancia un objeto tablero para cada jugador.
-//        tablero1=jugadores[0].getTablero();
         int p1=barcos[0].getPosicion();
         Barco b1=barcos[0];
         int cod1=barcos[0].getCodBarco();
@@ -119,7 +122,6 @@ public class JuegoHundido {
     }
     public static void tablero2(){
         tablero2=new Tablero(4,4,2); //Se instancia un objeto tablero para cada jugador.
-//        tablero2=jugadores[1].getTablero();
         int p1=barcos[2].getPosicion();
         Barco b1=barcos[2];
         int cod1=barcos[2].getCodBarco();
@@ -142,7 +144,10 @@ public class JuegoHundido {
         char matrizV[][]=jugadores[1].getTableroV(); //Tablero visible del jugador 2
         int matriz[][]=jugadores[1].getTablero(); //Tablero oculto del jugador 2, lo necesito para las condiciones
 
-        System.out.println(ANSI_YELLOW+"**Turno jugador 1**"+ANSI_RESET);
+        System.out.println(); //Espacio
+        System.out.println(ANSI_YELLOW+"** Turno jugador 1 **"+ANSI_RESET);
+        System.out.println(); //Espacio
+        System.out.println(ANSI_CYAN+"════════Tablero════════"+ANSI_RESET);
         /*Los tableros visibles se tienen que intercambiar para poder descubrir las posiciones del contrincante,
          si no, se estaría descubriendo el tablero del propio jugador. Los tableros ocultos siguen guardados con su jugador.*/
         GestionArray.mostrarMatrizCaracter(matrizV);
@@ -223,7 +228,10 @@ public class JuegoHundido {
         char matrizV[][]=jugadores[0].getTableroV(); //Tablero visible del jugador 1
         int matriz[][]=jugadores[0].getTablero(); //Tablero oculto del jugador 1
 
-        System.out.println(ANSI_YELLOW+"**Turno jugador 2**"+ANSI_RESET);
+        System.out.println(); //Espacio
+        System.out.println(ANSI_YELLOW+"** Turno jugador 2 **"+ANSI_RESET);
+        System.out.println(); //Espacio
+        System.out.println(ANSI_CYAN+"--------Tablero--------"+ANSI_RESET);
         GestionArray.mostrarMatrizCaracter(matrizV);
 
         do{
@@ -255,14 +263,14 @@ public class JuegoHundido {
                 barcosRestantes--;
                 jugadores[0].setBarcosRestantes(barcosRestantes); //Se le resta un barco al contrincante.
                 System.out.println(ANSI_YELLOW + "¡Barco tocado y hundido! " + "Restantes: " + barcosRestantes + ANSI_RESET);
-                matriz[b1.getC1row()][b1.getC1col()]='H';
-                matriz[b1.getC2row()][b1.getC2col()]='H';
+                matrizV[b1.getC1row()][b1.getC1col()]='H';
+                matrizV[b1.getC2row()][b1.getC2col()]='H';
             }else if (b2.getLongitud()==0 && matriz[coor1][coor2]==b2.getCodBarco()){
                 barcosRestantes--;
                 jugadores[0].setBarcosRestantes(barcosRestantes); //Se le resta un barco al contrincante.
                 System.out.println(ANSI_YELLOW + "¡Barco tocado y hundido! " + "Restantes: " + barcosRestantes + ANSI_RESET);
-                matriz[b2.getC1row()][b2.getC1col()]='H';
-                matriz[b2.getC2row()][b2.getC2col()]='H';
+                matrizV[b2.getC1row()][b2.getC1col()]='H';
+                matrizV[b2.getC2row()][b2.getC2col()]='H';
             }else {
                 System.out.println(ANSI_YELLOW + "¡Barco tocado!" + ANSI_RESET);
                 matrizV[coor1][coor2] = 'T';
@@ -294,13 +302,15 @@ public class JuegoHundido {
 
         char respuesta=' ';
 
-        System.out.println(ANSI_BLUE+"                                     # #  ( )\n" +
+        System.out.println(ANSI_BLUE+
+                "                                            \n"+
+                "                                     # #  ( )\n" +
                 "                                  ___#_#___|__\n" +
                 "                              _  |____________|  _\n" +
                 "                       _=====| | |            | | |==== _\n" +
                 "                 =====| |.---------------------------. | |====\n" +
                 "   <--------------------'   .  .  .  .  .  .  .  .   '--------------/\n" +
-                "     \\                           F5 HUNDIDO                        /\n" +
+                "     \\                            F5 HUNDIDO                       /\n" +
                 "      \\___________________________________________________________/\n" +
                 "  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
                 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"+ANSI_RESET);
@@ -313,7 +323,7 @@ public class JuegoHundido {
                     System.out.println(ANSI_YELLOW+"Saliendo del juego..."+ANSI_RESET);
                     break;
                 case 1:
-                    System.out.println(ANSI_BLUE+"NIVEL 1 -- Hunde los 2 barcos"+ANSI_RESET);
+                    System.out.println(ANSI_BLUE+"NIVEL 1 -- Hunde los 2 barcos del contrincante"+ANSI_RESET);
                     for(int x=0;x<2;x++) {
                         nuevoJugador(); //Se piden los datos de ambos jugadores
                         nuevoBarco();   //Además de la posicion de los barcos
