@@ -6,8 +6,8 @@ public class Barco {
     private int posicion; // 1-Vertical, 2-Horizontal
     private int codBarco;
     //casilla 1
-    private int c1row;
-    private int c1col;
+    private int c1row;  //Casilla 1 fila
+    private int c1col;  //Casilla 2 columna. Eso significan estas variables, lo mismo para las del abajo.
     //casilla 2
     private int c2row;
     private int c2col;

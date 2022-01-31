@@ -191,14 +191,23 @@ public class JuegoHundido {
                 barcosRestantes--;
                 jugadores[1].setBarcosRestantes(barcosRestantes); //Se le resta un barco al contrincante.
                 System.out.println(ANSI_YELLOW + "¡Barco tocado y hundido! " + "Restantes: " + barcosRestantes + ANSI_RESET);
-                matrizV[b1.getC1row()][b1.getC1col()]='H';
-                matrizV[b1.getC2row()][b1.getC2col()]='H'; //Se sustituyen las dos casillas que ocupa el barco enemigo por una H (hundido)
+                //Parece que no quiere funcionar si hago un get directamente dentro de los corchetes, asi que ristra de variables
+                int c1row=b1.getC1row();
+                int c1col=b1.getC1col();
+                int c2row=b1.getC2row();
+                int c2col=b1.getC2col();
+                matrizV[c1row][c1col]='H';
+                matrizV[c2row][c2col]='H'; //Se sustituyen las dos casillas que ocupa el barco enemigo por una H (hundido)
             }else if (b2.getLongitud()==0 && matriz[coor1][coor2]==b2.getCodBarco()){
                 barcosRestantes--;
                 jugadores[1].setBarcosRestantes(barcosRestantes); //Se le resta un barco al contrincante.
                 System.out.println(ANSI_YELLOW + "¡Barco tocado y hundido! " + "Restantes: " + barcosRestantes + ANSI_RESET);
-                matrizV[b2.getC1row()][b2.getC1col()]='H';
-                matrizV[b2.getC2row()][b2.getC2col()]='H';
+                int c1row=b2.getC1row();
+                int c1col=b2.getC1col();
+                int c2row=b2.getC2row();
+                int c2col=b2.getC2col();
+                matrizV[c1row][c1col]='H';
+                matrizV[c2row][c2col]='H';
             }else { //Si la longitud aún es mayor que 0 se sustituye la casilla por un T (tocado).
                 System.out.println(ANSI_YELLOW + "¡Barco tocado!" + ANSI_RESET);
                 matrizV[coor1][coor2] = 'T';
@@ -274,14 +283,22 @@ public class JuegoHundido {
                 barcosRestantes--;
                 jugadores[0].setBarcosRestantes(barcosRestantes); //Se le resta un barco al contrincante.
                 System.out.println(ANSI_YELLOW + "¡Barco tocado y hundido! " + "Restantes: " + barcosRestantes + ANSI_RESET);
-                matrizV[b1.getC1row()][b1.getC1col()]='H';
-                matrizV[b1.getC2row()][b1.getC2col()]='H';
+                int c1row=b1.getC1row();
+                int c1col=b1.getC1col();
+                int c2row=b1.getC2row();
+                int c2col=b1.getC2col();
+                matrizV[c1row][c1row]='H';
+                matrizV[c2row][c2col]='H';
             }else if (b2.getLongitud()==0 && matriz[coor1][coor2]==b2.getCodBarco()){
                 barcosRestantes--;
                 jugadores[0].setBarcosRestantes(barcosRestantes); //Se le resta un barco al contrincante.
                 System.out.println(ANSI_YELLOW + "¡Barco tocado y hundido! " + "Restantes: " + barcosRestantes + ANSI_RESET);
-                matrizV[b2.getC1row()][b2.getC1col()]='H';
-                matrizV[b2.getC2row()][b2.getC2col()]='H';
+                int c1row=b2.getC1row();
+                int c1col=b2.getC1col();
+                int c2row=b2.getC2row();
+                int c2col=b2.getC2col();
+                matrizV[c1row][c1col]='H';
+                matrizV[c2row][c2col]='H';
             }else {
                 System.out.println(ANSI_YELLOW + "¡Barco tocado!" + ANSI_RESET);
                 matrizV[coor1][coor2] = 'T';
