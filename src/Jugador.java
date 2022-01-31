@@ -10,7 +10,7 @@ public class Jugador {
     private int intentos=0;
     private int barcosRestantes=2;
     private int BarcosHundidos;
-    private boolean turno;
+//    private boolean turno;
     private int tablero[][];
     private char tableroV[][];
 

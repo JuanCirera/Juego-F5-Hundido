@@ -19,15 +19,12 @@ public class JuegoHundido {
     private static int filas;
     private static int col;
     private static int posicion;
-//    private static int posicion2;
     private static Barco b;
-//    private static Barco b2;
     private static int codBarco=0;
 
     //Arrays de clase para objetos
     private static Barco barcos[]=new Barco[4]; //Array para meter los objetos barco.
     private  static Jugador jugadores[]=new Jugador[2]; //Arra y para almacenar objetos jugador.
-//    private static Tablero tableros[]=new Tablero[2]; //Array para almacenar los datos de los tableros
 
 
     /**
@@ -132,18 +129,23 @@ public class JuegoHundido {
         tablero2.gestionTablero(p1, p2, b1, b2, cod1, cod2, jugadores[1]);    //Se llama a la funcion matriz para crear ambos tableros.
     }
 
+    /**
+     * Funcion que gestiona el turno del jugador 1.
+     * */
     public static void turnoJ1(){
         int intentos= jugadores[0].getIntentos();
-        int barcosRestantes=jugadores[0].getBarcosRestantes();
-        Barco b1=barcos[0];
-        Barco b2=barcos[1];
+        int barcosRestantes=jugadores[1].getBarcosRestantes(); //Se necesita saber los barcos que le quedan al contrincante
+        Barco b1=barcos[2]; //Los barcos también se tienen que invertir porque se les resta una casilla cuando son tocados por un disparo.
+        Barco b2=barcos[3];
         int coor1, coor2;
 
-        char matrizV[][]=jugadores[0].getTableroV();
-        int matriz[][]=jugadores[0].getTablero();
+        char matrizV[][]=jugadores[1].getTableroV(); //Tablero visible del jugador 2
+        int matriz[][]=jugadores[1].getTablero(); //Tablero oculto del jugador 2, lo necesito para las condiciones
 
         System.out.println(ANSI_YELLOW+"**Turno jugador 1**"+ANSI_RESET);
-        GestionArray.mostrarMatrizCaracter(jugadores[0].getTableroV());
+        /*Los tableros visibles se tienen que intercambiar para poder descubrir las posiciones del contrincante,
+         si no, se estaría descubriendo el tablero del propio jugador. Los tableros ocultos siguen guardados con su jugador.*/
+        GestionArray.mostrarMatrizCaracter(matrizV);
 
         do{
             coor1=JuegoHundido.pedirFila();
@@ -153,29 +155,33 @@ public class JuegoHundido {
             }
         }while (coor1>matriz.length | coor2>matriz.length);
 
-        boolean control= tablero1.comprobarDisparo(barcos[0], barcos[1], coor1, coor2);
+        boolean control= tablero1.comprobarDisparo(b1, b2, coor1, coor2, jugadores[1]);
 
 
         if (control == true && matrizV[coor1][coor2]=='*' && matrizV[coor1][coor2]!='T') {
             intentos++;
             jugadores[0].setIntentos(intentos);
-            if (matriz[coor1][coor2]==1) {
+            if (matriz[coor1][coor2]==b1.getCodBarco()) {
                 int longitud=b1.getLongitud();
-                b1.setLongitud(longitud-1);
+                longitud--;
+                b1.setLongitud(longitud);
                 System.out.println(b1.getLongitud());
             }else{
                 int longitud=b2.getLongitud();
-                b2.setLongitud(longitud-1);
+                longitud--;
+                b2.setLongitud(longitud);
                 System.out.println(b2.getLongitud());
             }
             //Si la longitud del barco llega a 0 y las coordenadas contienen su codigo, las casillas que ocupa cambian a Hundido, se resta un barco y se informa al jugador.
-            if (b1.getLongitud()==0 && matriz[coor1][coor2]==1){
+            if (b1.getLongitud()==0 && matriz[coor1][coor2]==b1.getCodBarco()){
                 barcosRestantes--;
+                jugadores[1].setBarcosRestantes(barcosRestantes); //Se le resta un barco al contrincante.
                 System.out.println(ANSI_YELLOW + "¡Barco tocado y hundido! " + "Restantes: " + barcosRestantes + ANSI_RESET);
                 matrizV[b1.getC1row()][b1.getC1col()]='H';
                 matrizV[b1.getC2row()][b1.getC2col()]='H';
-            }else if (b2.getLongitud()==0 && matriz[coor1][coor2]==2){
+            }else if (b2.getLongitud()==0 && matriz[coor1][coor2]==b2.getCodBarco()){
                 barcosRestantes--;
+                jugadores[1].setBarcosRestantes(barcosRestantes); //Se le resta un barco al contrincante.
                 System.out.println(ANSI_YELLOW + "¡Barco tocado y hundido! " + "Restantes: " + barcosRestantes + ANSI_RESET);
                 matrizV[b2.getC1row()][b2.getC1col()]='H';
                 matrizV[b2.getC2row()][b2.getC2col()]='H';
@@ -204,19 +210,21 @@ public class JuegoHundido {
         }
     }
 
-
+    /**
+     * Funcion que gestiona el turno del jugador 2.
+     * */
     public static void turnoJ2(){
         int intentos= jugadores[1].getIntentos();
-        int barcosRestantes=jugadores[1].getBarcosRestantes();
-        Barco b1=barcos[2];
-        Barco b2=barcos[3];
+        int barcosRestantes=jugadores[0].getBarcosRestantes(); //Se necesita saber los barcos que le quedan al contrincante.
+        Barco b1=barcos[0]; //Los barcos también se tienen que invertir porque se les resta una casilla cuando son tocados por un disparo.
+        Barco b2=barcos[1];
         int coor1, coor2;
 
-        char matrizV[][]=jugadores[1].getTableroV();
-        int matriz[][]=jugadores[1].getTablero();
+        char matrizV[][]=jugadores[0].getTableroV(); //Tablero visible del jugador 1
+        int matriz[][]=jugadores[0].getTablero(); //Tablero oculto del jugador 1
 
         System.out.println(ANSI_YELLOW+"**Turno jugador 2**"+ANSI_RESET);
-        GestionArray.mostrarMatrizCaracter(jugadores[1].getTableroV());
+        GestionArray.mostrarMatrizCaracter(matrizV);
 
         do{
             coor1=JuegoHundido.pedirFila();
@@ -225,29 +233,33 @@ public class JuegoHundido {
                 System.out.println(ANSI_RED + "El valor esta fuera de rango. Vuelve a intentarlo." + ANSI_RESET);
             }
         }while (coor1>matriz.length | coor2>matriz.length);
-        boolean control= tablero2.comprobarDisparo(barcos[2], barcos[3], coor1, coor2);
+        boolean control= tablero2.comprobarDisparo(b1, b2, coor1, coor2, jugadores[0]);
 
 
         if (control == true && matrizV[coor1][coor2]=='*' && matrizV[coor1][coor2]!='T') {
             intentos++;
             jugadores[1].setIntentos(intentos);
-            if (matriz[coor1][coor2]==1) {
+            if (matriz[coor1][coor2]==b1.getCodBarco()) {
                 int longitud=b1.getLongitud();
-                b1.setLongitud(longitud-1);
+                longitud--;
+                b1.setLongitud(longitud);
                 System.out.println(b1.getLongitud());
             }else{
                 int longitud=b2.getLongitud();
-                b2.setLongitud(longitud-1);
+                longitud--;
+                b2.setLongitud(longitud);
                 System.out.println(b2.getLongitud());
             }
             //Si la longitud del barco llega a 0 y las coordenadas contienen su codigo, las casillas que ocupa cambian a Hundido, se resta un barco y se informa al jugador.
-            if (b1.getLongitud()==0 && matriz[coor1][coor2]==1){
+            if (b1.getLongitud()==0 && matriz[coor1][coor2]==b1.getCodBarco()){
                 barcosRestantes--;
+                jugadores[0].setBarcosRestantes(barcosRestantes); //Se le resta un barco al contrincante.
                 System.out.println(ANSI_YELLOW + "¡Barco tocado y hundido! " + "Restantes: " + barcosRestantes + ANSI_RESET);
                 matriz[b1.getC1row()][b1.getC1col()]='H';
                 matriz[b1.getC2row()][b1.getC2col()]='H';
-            }else if (b2.getLongitud()==0 && matriz[coor1][coor2]==2){
+            }else if (b2.getLongitud()==0 && matriz[coor1][coor2]==b2.getCodBarco()){
                 barcosRestantes--;
+                jugadores[0].setBarcosRestantes(barcosRestantes); //Se le resta un barco al contrincante.
                 System.out.println(ANSI_YELLOW + "¡Barco tocado y hundido! " + "Restantes: " + barcosRestantes + ANSI_RESET);
                 matriz[b2.getC1row()][b2.getC1col()]='H';
                 matriz[b2.getC2row()][b2.getC2col()]='H';
@@ -282,16 +294,16 @@ public class JuegoHundido {
 
         char respuesta=' ';
 
-//        System.out.println(ANSI_BLUE+"                                     # #  ( )\n" +
-//                "                                  ___#_#___|__\n" +
-//                "                              _  |____________|  _\n" +
-//                "                       _=====| | |            | | |==== _\n" +
-//                "                 =====| |.---------------------------. | |====\n" +
-//                "   <--------------------'   .  .  .  .  .  .  .  .   '--------------/\n" +
-//                "     \\                           F5 HUNDIDO                        /\n" +
-//                "      \\___________________________________________________________/\n" +
-//                "  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-//                "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"+ANSI_RESET);
+        System.out.println(ANSI_BLUE+"                                     # #  ( )\n" +
+                "                                  ___#_#___|__\n" +
+                "                              _  |____________|  _\n" +
+                "                       _=====| | |            | | |==== _\n" +
+                "                 =====| |.---------------------------. | |====\n" +
+                "   <--------------------'   .  .  .  .  .  .  .  .   '--------------/\n" +
+                "     \\                           F5 HUNDIDO                        /\n" +
+                "      \\___________________________________________________________/\n" +
+                "  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+                "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"+ANSI_RESET);
 
         do {
             mostrarMenu();
@@ -312,15 +324,22 @@ public class JuegoHundido {
                     //TURNOS
                     do {
                         turnoJ1();
+                        if (jugadores[1].getBarcosRestantes()==0 | jugadores[0].getBarcosRestantes()==0){
+                            break;
+                        }
                         turnoJ2();
-                    }while (jugadores[0].getBarcosRestantes()>0 | jugadores[1].getBarcosRestantes()>0);
+                        if (jugadores[0].getBarcosRestantes()==0){
+                            break;
+                        }
 
-                    if (jugadores[0].getBarcosRestantes()==0 ){
-                        int total=jugadores[0].getIntentos()-tablero1.barcos;
+                    }while (true);
+
+                    if (jugadores[1].getBarcosRestantes()==0 ){
+                        int total=jugadores[0].getIntentos()-tablero2.barcos;
                         System.out.println(ANSI_GREEN+"¡Enhorabuena, "+jugadores[0].getNombre()+" ha superado el nivel 1! Con "+total+" intentos."+ANSI_RESET);
                         break;
-                    }else if (jugadores[1].getBarcosRestantes()==0 ){
-                        int total=jugadores[1].getIntentos()-tablero2.barcos;
+                    }else if (jugadores[0].getBarcosRestantes()==0 ){
+                        int total=jugadores[1].getIntentos()-tablero1.barcos;
                         System.out.println(ANSI_GREEN+"¡Enhorabuena, "+jugadores[1].getNombre()+" ha superado el nivel 1! Con "+total+" intentos."+ANSI_RESET);
                         break;
                     }

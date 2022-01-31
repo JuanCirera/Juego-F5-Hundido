@@ -17,7 +17,7 @@ public class Tablero {
     private int col;       //Guarda el número de columnas que va a tener el tablero
     public static int barcos;       //Guarda el número maximo de barcos que hay en el nivel.
     public int barcosRestantes;
-//    public int intentos=0;
+
     //Atributos privados de clase
     public static int x=0, x1=0; //Segunda casilla, horizontal
     public static int y=0, y1=0; //Segunda casilla, vertical
@@ -49,12 +49,9 @@ public class Tablero {
      * @return control - Si las coordenadas introducidas coinciden con una casilla que contenga algún código de barco devuelve true.
      * */
     public void gestionTablero(int pos1, int pos2, Barco b1, Barco b2, int cod1, int cod2, Jugador jugador){
-//        intentos= jugador.getIntentos();
-//        boolean control=false;  //Variable de control para el for
 
         //Inicializo el array definido a 0. Meto los arrays en variables para poder manejarlos mejor despues.
         matriz= GestionArray.InicializarMatrizEnteros(this.filas,this.col,0);
-        jugador.setTablero(matriz); //Se guarda el tablero real con las posiciones en el objeto jugador
 
         //El array visible se inicializa parecido al original con la diferencia de que este almacena caracteres.
         matrizVisible=GestionArray.InicializarMatrizCaracter(this.filas,this.col,'*');
@@ -65,65 +62,14 @@ public class Tablero {
         esconderBarco(matriz, this.barcos, cod1);  //Se llama a la funcion esconderBarcos para posicionar el 1er barco.
         generarCoor(matriz, pos2);
         generarBarco(b2);
-        esconderBarco(matriz, this.barcos, cod2);  //Se llama a la funcion esconderBarcos para posicionar el 2º barco.
-        //Se le pasa por parametro "barcos" para que no pase de ese limite.
-
-
-                //Si control vale true se decrementa en 1 los barcos restantes, se muestra y se asigna a la matriz "copia" la T para indicar
-                //que hay un barco cuando se muestre toda la matriz. Hay un mensaje personalizado segun que casilla introduzcas repetidamente.
-//                if (control == true && matrizVisible[coor1][coor2]=='*' && matrizVisible[coor1][coor2]!='T') {
-//                    intentos++;
-//                    if (matriz[coor1][coor2]==1) {
-//                        int longitud=b1.getLongitud();
-//                        b1.setLongitud(longitud-1);
-//                        System.out.println(b1.getLongitud());
-//                    }else{
-//                        int longitud=b2.getLongitud();
-//                        b2.setLongitud(longitud-1);
-//                        System.out.println(b2.getLongitud());
-//                    }
-//                    //Si la longitud del barco llega a 0 y las coordenadas contienen su codigo, las casillas que ocupa cambian a Hundido, se resta un barco y se informa al jugador.
-//                    if (b1.getLongitud()==0 && matriz[coor1][coor2]==1){
-//                        barcosRestantes--;
-//                        System.out.println(ANSI_YELLOW + "¡Barco tocado y hundido! " + "Restantes: " + barcosRestantes + ANSI_RESET);
-//                        matrizVisible[b1.getC1row()][b1.getC1col()]='H';
-//                        matrizVisible[b1.getC2row()][b1.getC2col()]='H';
-//                    }else if (b2.getLongitud()==0 && matriz[coor1][coor2]==2){
-//                        barcosRestantes--;
-//                        System.out.println(ANSI_YELLOW + "¡Barco tocado y hundido! " + "Restantes: " + barcosRestantes + ANSI_RESET);
-//                        matrizVisible[b2.getC1row()][b2.getC1col()]='H';
-//                        matrizVisible[b2.getC2row()][b2.getC2col()]='H';
-//                    }else {
-//                        System.out.println(ANSI_YELLOW + "¡Barco tocado!" + ANSI_RESET);
-//                        matrizVisible[coor1][coor2] = 'T';
-//                    }
-//
-//                } else if (control == false && matrizVisible[coor1][coor2]=='*'){
-//                    intentos++; //Entiendo que el número de intentos suma cada vez que fallas, no cuando aciertas.
-//                    System.out.println(ANSI_YELLOW + "¡Agua! Llevas "+intentos+" intentos."+ ANSI_RESET);
-//                    matrizVisible[coor1][coor2]='A';
-//                } else if (control == true && matrizVisible[coor1][coor2]=='T'){
-//                    intentos++;
-//                    System.out.println(ANSI_YELLOW + "¡Hey! Fíjate bien, ¡esa casilla ya esta descubierta! Llevas "+intentos+" intentos."+ ANSI_RESET);
-//                } else if (control == false && matrizVisible[coor1][coor2]=='A' && intentos>27) {  //Pequeño Easter Egg. Ni caso.
-//                    intentos++;
-//                    System.out.println(ANSI_YELLOW + "Esta casilla ya esta descubierta y encima vacía...¿Necesitas gafas? Llevas "+intentos+" intentos."+ ANSI_RESET);
-//                }else{
-//                    intentos++;
-//                    System.out.println(ANSI_YELLOW + "Ya has descubierto esta casilla. Llevas "+intentos+" intentos."+ ANSI_RESET);
-//                }
-//            } while (barcosRestantes > 0);
-
-//        }catch (ArrayIndexOutOfBoundsException e){  //Se captura esta excepcion que salta al introducir un valor que esta fuera del rango del array. Ej: arr5x5 y valor=5, falla.
-//            System.out.println(ANSI_RED+"Error. El valor esta fuera de rango."+ANSI_RESET);
-//        }catch (Exception e) {    //Captura excepciones genericas, no previstas.
-//            System.out.println(ANSI_RED + "Error. Desconocido." + ANSI_RESET);
-//        }
-//        return control;
+        esconderBarco(matriz, this.barcos, cod2);  /*Se llama a la funcion esconderBarcos para posicionar el 2º barco.
+                                                    Se le pasa por parametro "barcos" para que no pase de ese limite.*/
+        jugador.setTablero(matriz); //Se guarda el tablero real con las posiciones en el objeto jugador
     }
 
-    public boolean comprobarDisparo(Barco b1, Barco b2, int coor1, int coor2){
+    public boolean comprobarDisparo(Barco b1, Barco b2, int coor1, int coor2, Jugador jugador){
         boolean control=false;  //Variable de control para el for
+        int matriz[][]=jugador.getTablero();
 
         try {
             //En este for se comprueba que valor se guarda en la posicion del array a la que corresponde las coordenadas introducidas.
@@ -143,17 +89,6 @@ public class Tablero {
             System.out.println(ANSI_RED + "Error. Desconocido." + ANSI_RESET);
         }
         return control;
-    }
-
-
-    /**
-     * Funcion que muestra el tablero "falso" en pantalla.
-     * @param matrizV tablero visible.
-     * */
-    public static void mostarTablero(char matrizV[][]){
-        System.out.println(ANSI_YELLOW + "-------Tablero de juego-------" + ANSI_RESET);
-        GestionArray.mostrarMatrizCaracter(matrizV);   //El array que se muestra no sería el auténtico definido, sino una copia en la
-        //que se van sustituyendo valores segun el valor de las posiciones del array original.
     }
 
 
@@ -200,7 +135,7 @@ public class Tablero {
             barco.setC1col(cols);
             barco.setC2row(y);
             barco.setC2col(x);
-            System.out.println("Barco: "+barco.getC1row()+","+barco.getC1col()+"; "+barco.getC2row()+","+barco.getC2col());
+//            System.out.println("Barco: "+barco.getC1row()+","+barco.getC1col()+"; "+barco.getC2row()+","+barco.getC2col()); //QUITAR
     }
 
 
@@ -219,7 +154,7 @@ public class Tablero {
                 if (matriz[rows][cols]==0 && barcos<maxBarcos) {   //Además el contador debe ser menor a 10, en este caso, para que no cambie mas de 10 casillas.
                     matriz[rows][cols]=codBarco;    //En vez de sustuir los 0 por 1, cada barco tiene un codigo(numero) que se introduce por parametro.
                     matriz[y][x]=codBarco;
-                    System.out.println(codBarco);
+//                    System.out.println(codBarco);
                     barcos++;  //Cada vez que se esconda un barco incrementa el contador
                 }
             }
